@@ -1,0 +1,30 @@
+{
+  "name": "memory-capsule-admin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "memory",
+    "capsule",
+    "town"
+  ],
+  "author": "town",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.15.2",
+    "cookies": "^0.6.1",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "js-md5": "^0.7.3",
+    "markdown": "^0.5.0",
+    "mongoose": "^5.2.12",
+    "multer": "^1.3.1",
+    "mysql": "^2.16.0",
+    "nodemon": "^1.18.4",
+    "qs": "^6.5.2"
+  }
+}
