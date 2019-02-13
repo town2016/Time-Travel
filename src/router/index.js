@@ -6,6 +6,8 @@ const Edit = resolve => { require(['views/edit'], resolve) }
 const My = resolve => { require(['views/my'], resolve) }
 const Signin = resolve => { require(['views/signin'], resolve) }
 const Signup = resolve => { require(['views/signup'], resolve) }
+const MemoryList = resolve => { require(['views/memoryList'], resolve) }
+const Setting = resolve => { require(['views/setting'], resolve) }
 Vue.use(Router)
 
 const router = new Router({
@@ -30,6 +32,14 @@ const router = new Router({
       name: 'signup',
       path: '/signup',
       component: Signup
+    }, {
+      name: 'memoryList',
+      path: '/memoryList',
+      component: MemoryList
+    }, {
+      name: 'setting',
+      path: '/setting',
+      component: Setting
     }
   ]
 })

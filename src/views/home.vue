@@ -3,16 +3,11 @@
   <div class="topNav flex">
     <div ref="scroll" style="width: 100%;">
       <span>memory capsule</span>
-      <ul class="list-wrapper" v-if='false'>
-        <li v-for="(item, index) in categorys"
-          @click='_changeTab(index)'
-          :key='item.value'
-          class="list-item flex-1"
-          :class="{active: curIndex === index}">
-            {{ item.label }}
-        </li>
-      </ul>
+      <span style="float: right; padding-right: 10px;"><i class='cubeic-person'></i>&nbsp;town</span>
     </div>
+  </div>
+  <div class="position" @click='_getLocation'>
+    <img src="../assets/position.jpg" width="30px" height="30px" />
   </div>
   <div id="mapContainer"></div>
 </div>
@@ -21,23 +16,29 @@
 <script>
 import AMap from 'AMap'
 import { getMemoryList } from '@/api/home'
+import { mapMutations } from 'vuex'
+import avatarDefault from '../assets/user_default.png'
 export default {
   name: 'Home',
   data () {
     return {
-      categorys: [
-        { label: '此时', value: 'time' },
-        { label: '此地', value: 'where' },
-        { label: '我的', value: 'self' },
-        { label: '他的', value: 'other' }
-      ],
       curIndex: 0,
       pager: {
         pageNo: 1,
         pageSize: 10
       },
-      Amap: null
+      Amap: null,
+      timer: null,
+      markers: [],
+      loading: null,
+      infoWindow: null,
+      avatarDefault: avatarDefault
     }
+  },
+  activated () {
+    this.$nextTick(() => {
+      this._getLocation()
+    })
   },
   mounted () {
     this.$nextTick(() => {
@@ -49,12 +50,12 @@ export default {
       this.curIndex = index
     },
     _getLocation () {
-      const toast = this.$createToast({
+      this.loading = this.$createToast({
         txt: 'Loading...',
         time: 0,
         mask: true
       })
-      toast.show()
+      this.loading.show()
       var amap = new AMap.Map('mapContainer', {
         zoom: 14,
         resizeEnable: true
@@ -85,27 +86,30 @@ export default {
             // 设置拖拽效果
             raiseOnDrag: true
           })
+          this.setCurPos(data)// 将当前定位信息保存到vuex中
           amap.add(marker)
           this._getMemoryList(position.R, position.Q)
-          toast.hide()
+          this.loading.hide()
           // 地图覆盖物的拖拽回调
-          marker.on('touchend', (data) => {
+          marker.on('dragend', (data) => {
             amap.setCenter([data.lnglat.R, data.lnglat.Q])
+            setTimeout(() => {
+              this._getMemoryList(data.lnglat.R, data.lnglat.Q)
+            }, 100)
           })
           // 拖动地图的时候的回调
-          amap.on('touchend', (data) => {
+          amap.on('dragend', (data) => {
             // 获取地图中心点位置
             let center = amap.getCenter()
             let positions = [center.R, center.Q]
             setTimeout(() => {
               this._getMemoryList(positions[0], positions[1])
               marker.setPosition(positions)
-              
-            }, 200)
+            }, 100)
           })
         })
         AMap.event.addListener(geolocation, 'error', (data) => {
-          toast.hide()
+          this.loading.hide()
           setTimeout(() => {
             this.$createToast({
               txt: data.message,
@@ -117,23 +121,81 @@ export default {
       })
     },
     _getMemoryList (lng, lat) {
-      var params = {
-        ...this.pager,
-        lng,
-        lat
+      if (this.timer) {
+        window.clearTimeout(this.timer)
+        this.timer = null
       }
-      getMemoryList(params).then(res => {
-        if (res.data && res.data.length > 0) {
-          res.data.map(item => {
-            var marker = new AMap.Marker({
-              position: new AMap.LngLat(item.lng, item.lat)
-            })
-            this.Amap.add(marker)
-          })
-          
+      this.infoWindow && this.infoWindow.close()
+      this.timer = setTimeout(() => {
+        var params = {
+          ...this.pager,
+          lng: lng,
+          lat: lat
         }
-      })
-    }
+        getMemoryList(params).then(res => {
+          this.Amap.remove(this.markers)
+          this.markers = []
+          if (res.data && res.data.length > 0) {
+            res.data.map(item => {
+              // 创建范围内的数据点标记
+              var marker = new AMap.Marker({
+                position: new AMap.LngLat(item.lng, item.lat),
+                map: this.Amap,
+                icon: new AMap.Icon({
+                  image: item.avatar ? item.avatar : this.avatarDefault,
+                  size: new AMap.Size(25, 25),
+                  imageSize: new AMap.Size(25, 25)
+                })
+              })
+              // 点击点标记展示数据
+              marker.on('click', () => {
+                this.infoWindow = new AMap.InfoWindow({
+                  isCustom: true,
+                  content: this.createInfoWindow(item.content),
+                  offset: new AMap.Pixel(16, -45)
+                })
+                this.infoWindow.open(this.Amap, marker.getPosition())
+              })
+              this.Amap.add(marker)
+              this.markers.push(marker)
+            })
+          }
+        })
+      }, 500)
+    },
+    createInfoWindow (content) {
+      var info = document.createElement('div')
+      var top = document.createElement('div')
+      top.style.cssText = 'background-color: #07CBFC; border-bottom: 1px solid #fff;height: 25px;color: #fff; padding:0 5px;line-height: 25px;'
+      var closeX = document.createElement('span')
+      var title = document.createElement('span')
+      title.innerText = 'Feelling'
+      closeX.style.cssText = 'font-size: 20px;float: right;'
+      closeX.innerHTML = 'x'
+      closeX.onclick = this.closeInfoWindow
+      top.appendChild(closeX)
+      top.appendChild(title)
+      info.appendChild(top)
+      // 定义中部内容
+      var middle = document.createElement('div')
+      middle.style.cssText = 'background-color: #07CBFC; padding:20px 10px;  border-radius: 3px; color: #fff;max-width: 300px;word-break: break-word;line-height: 24px;font-size: 12px;'
+      middle.innerHTML = content
+      info.appendChild(middle)
+      // 定义底部内容
+      var bottom = document.createElement('div')
+      bottom.style.cssText = 'position: relative;top: 0;margin: 0 auto;'
+      var sharp = document.createElement('div')
+      sharp.style.cssText = 'position: absolute;left: 50%;margin-left: -10px;height: 0;border-style: solid;border-width: 10px 6px 0 6px; border-color: #07CBFC transparent transparent  transparent;'
+      bottom.appendChild(sharp)
+      info.appendChild(bottom)
+      return info
+    },
+    closeInfoWindow () {
+      this.infoWindow.close()
+    },
+    ...mapMutations([
+      'setCurPos'
+    ])
   }
 }
 </script>
@@ -143,17 +205,25 @@ export default {
 .Home{
   width: 100%;
   height: 100%;
+  padding-top: 50px;
   position: relative;
   box-sizing: border-box;
   #mapContainer{
     height: 100%;
   }
+  .position{
+    position: fixed;
+    z-index: 800;
+    top: 60px;
+    right: 2%;
+    margin-right: 10px;
+  }
   .topNav{
     text-align: left;
     text-indent: 20px;
-    line-height: 40px;
+    line-height: 50px;
     font-size: 14px;
-    height: 40px;
+    height: 50px;
     position: absolute;
     top: 0;
     left: 0;
@@ -162,10 +232,8 @@ export default {
     background-color: #fff;
     .boxShadow(0 0 5px rgba(0,0,0,0.3));
     span{
-      font-weight: 200;
-      color: transparent;
-      background: linear-gradient(to right, #3583d8, #07cbfc );
-      -webkit-background-clip: text;
+      font-weight: 400;
+      color: #3583d8;
     }
     .list-wrapper{
       white-space: nowrap;

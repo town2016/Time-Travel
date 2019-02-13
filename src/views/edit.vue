@@ -5,7 +5,7 @@
       <span class="cubeic-back" @click='goback'></span>
     </div>
     <div class="flex-1">
-      <cube-button type='button' :outline='true' :disabled='feelling.length === 0'>发布</cube-button>
+      <cube-button type='button' style='color: #07CBFC;' :outline='true' :disabled='feelling.length === 0' @click='_pulish'>发布</cube-button>
     </div>
   </div>
   <div class="edit-wrapper">
@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import { addMemory } from '@/api/edit'
 export default {
   name: 'Edit',
   data () {
@@ -36,6 +38,18 @@ export default {
         this.$createDialog({
           type: 'confirm',
           content: '是否保存当前信息？',
+          confirmBtn: {
+            text: '是',
+            active: true,
+            disabled: false,
+            href: 'javascript:;'
+          },
+          cancelBtn: {
+            text: '否',
+            active: false,
+            disabled: false,
+            href: 'javascript:;'
+          },
           onCancel: () => {
             this.feelling = ''
             this.$router.go(-1)
@@ -47,7 +61,45 @@ export default {
         return
       }
       this.$router.go(-1)
+    },
+    _pulish () {
+      if (Object.keys(this.positions).length === 0) {
+        this.$createToast({
+          txt: '未获取定位信息,不能发布动态'
+        }).show()
+        return
+      }
+      let address = this.positions.addressComponent
+      var params = {
+        content: this.feelling,
+        lng: this.positions.position ? this.positions.position.R : '',
+        lat: this.positions.position ? this.positions.position.Q : '',
+        address: address.province + address.district + address.street + address.streetNumber
+      }
+      addMemory(params).then(res => {
+        this.$createToast({
+          txt: '发布成功',
+          time: 2000,
+          type: 'correct'
+        }).show()
+        this.feelling = ''
+        this.$router.push({
+          path: '/'
+        })
+      }).catch(e => {
+        console.log(e)
+        this.$createToast({
+          txt: e.message,
+          time: 2000,
+          type: 'error'
+        }).show()
+      })
     }
+  },
+  computed: {
+    ...mapGetters([
+      'positions'
+    ])
   }
 }
 </script>

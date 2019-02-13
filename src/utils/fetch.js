@@ -22,6 +22,9 @@ instance.interceptors.request.use(config => {
 })
 
 instance.interceptors.response.use(function (res) {
+  if (res.data.code === 401) {
+    router.replace({name: 'signin'})
+  }
   return res
 }, (error) => {
   let response = error.response
@@ -44,7 +47,7 @@ global.fetch = {
     }
     return new Promise((resolve, reject) => {
       instance.get(url).then((res) => {
-        if (res.data.code === ERROK || res.data.status === ERROK) {
+        if (res.data.code === ERROK) {
           resolve(res.data)
         } else {
           reject(res.data)
@@ -58,7 +61,8 @@ global.fetch = {
   post: (url, params, config) => {
     return new Promise((resolve, reject) => {
       instance.post(url, params).then((res) => {
-        if (res.data.code === ERROK || res.data.status === ERROK) {
+        console.log(res)
+        if (res.data.code === ERROK) {
           resolve(res.data)
         } else {
           reject(res.data)

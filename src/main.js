@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import './assets/less/animate.css'
 import '@/utils/fetch'
+import store from '@/store'
 import {
   /* eslint-disable no-unused-vars */
   Style,
@@ -27,6 +28,7 @@ createAPI(Vue, App, ['click'], true)
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

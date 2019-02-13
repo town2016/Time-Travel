@@ -14,7 +14,8 @@ router.use((req, res, next) => {
 const SQL = {
   queryAll: 'select account, avatar, userId, slogon, createDate, updateDate from user',
   queryOne: 'select account, avatar, userId, slogon, createDate, updateDate, phone from user where ',
-  add: 'insert into user '
+  add: 'insert into user ',
+  update: 'update user set '
 }
 
 // 拉取所有用户
@@ -129,6 +130,20 @@ router.get('/signout', (req, res, next) => {
     response.message = '当前状态为未登录状态'
   }
   res.json(response)
+})
+
+// 修改用户信息
+router.post('/updateUser', (req, res, next) => {
+  if (res.status === 401) {
+    res.json({code: 401, message: '用户未登录'})
+    return
+  }
+  var params = req.body
+  var where = `userId = ${params.userId}`
+  params = tools.makeUpdates(params)
+  connection.query(`${SQL.update}${params} WHERE ${where}`, (err, rows) => {
+    tools.makeResponse(req, res, err, rows)
+  })
 })
 
 module.exports = router

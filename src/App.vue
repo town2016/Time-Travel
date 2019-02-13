@@ -61,7 +61,7 @@ export default {
   right: 2%;
   height: 50px;
   width: 50px;
-  z-index: 100;
+  z-index: 800;
   opacity: 0.8;
   background-color: #2ebbf2;
   border-radius: 50%;

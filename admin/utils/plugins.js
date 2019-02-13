@@ -49,23 +49,21 @@ function makeInserts (params) {
   return insertStr
 }
 
-// 经纬度计算
-function calculatLngLat (lng, lat) {
-  var earthR = 6371, distance = 0.5
-  var dlng = 2*Math.asin(Math.sin(distance/(2*earthR))/Math.cos(lat*Math.PI/180))
-  dlng = dlng*180/Math.PI;//角度转为弧度  
-  var dlat = distance/earthR;  
-  dlat = dlat*180/Math.PI;
-  console.log(dlng, dlat)
-  return {
-    lng: (lng * 1 + dlng),
-    lat: (lat * 1 + dlat)
+
+function makeUpdates (params) {
+  var str = ''
+  if (params && Object.keys(params).length > 0) {
+    for (var k in params) {
+      str += `${k}='${params[k]}', `
+    }
+    str = str.substring(0, str.length - 2)
   }
+  return str
 }
 
 module.exports = {
   makeQueryTerms,
   makeResponse,
   makeInserts,
-  calculatLngLat
+  makeUpdates
 }

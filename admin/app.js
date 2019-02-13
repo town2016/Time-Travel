@@ -97,8 +97,10 @@ app.get('/signout', (req, res, next) => {
   res.json(response)
 })
 
+app.use('/static', express.static(__dirname + '/static'))
 app.use('/user', require('./routers/user'))
 app.use('/memory', require('./routers/memory'))
+app.use('/tools', require('./routers/tools'))
 
 app.get('*', function(req, res){
   res.write(`
