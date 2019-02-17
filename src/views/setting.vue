@@ -14,7 +14,7 @@
           <form id="fileUpload">
             <input type="file" accept="image/*" @change='_updateAvatar' name="avatar"/>
           </form>
-          <img :src="userInfo.avatar === 'null' ? avatarDefault : userInfo.avatar" width="20" height="20"/>
+          <img :src="!userInfo.avatar ? avatarDefault : userInfo.avatar" width="20" height="20"/>
           <i class="cubeic-arrow"></i>
         </div>
       </div>
@@ -80,6 +80,9 @@ export default {
           type: 'correct'
         }).show()
         Cookies.set('user', JSON.stringify(this.userInfo))
+        this.$router.push({
+          path: '/my'
+        })
       }).catch(e => {
         this.$createToast({
           txt: e.message,

@@ -1,9 +1,9 @@
 const mysql = require('mysql')
 let connection = mysql.createConnection({
-  host: '127.0.0.1',
-  user: '数据库用户名',
-  database: '数据库名',
-  password: '数据库登录密码'
+  host: '112.74.39.234',
+  user: 'root',
+  database: 'town',
+  password: 'Hd123456'
 })
 
 connection.connect((err) => {

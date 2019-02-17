@@ -50,11 +50,11 @@ export default {
   },
   activated () {
     this.userInfo = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {}
-    this.avatar = this.userInfo.avatar !== 'null' ? this.userInfo.avatar : avatarDefault
+    this.avatar = this.userInfo.avatar ? this.userInfo.avatar : avatarDefault
   },
   created () {
     this.userInfo = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {}
-    this.avatar = this.userInfo.avatar !== 'null' ? this.userInfo.avatar : avatarDefault
+    this.avatar = this.userInfo.avatar ? this.userInfo.avatar : avatarDefault
   },
   methods: {
     goback () {

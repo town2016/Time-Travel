@@ -151,7 +151,7 @@ export default {
               marker.on('click', () => {
                 this.infoWindow = new AMap.InfoWindow({
                   isCustom: true,
-                  content: this.createInfoWindow(item.content),
+                  content: this.createInfoWindow(item),
                   offset: new AMap.Pixel(16, -45)
                 })
                 this.infoWindow.open(this.Amap, marker.getPosition())
@@ -163,13 +163,13 @@ export default {
         })
       }, 500)
     },
-    createInfoWindow (content) {
+    createInfoWindow (item) {
       var info = document.createElement('div')
       var top = document.createElement('div')
       top.style.cssText = 'background-color: #07CBFC; border-bottom: 1px solid #fff;height: 25px;color: #fff; padding:0 5px;line-height: 25px;'
       var closeX = document.createElement('span')
       var title = document.createElement('span')
-      title.innerText = 'Feelling'
+      title.innerText = item.account
       closeX.style.cssText = 'font-size: 20px;float: right;'
       closeX.innerHTML = 'x'
       closeX.onclick = this.closeInfoWindow
@@ -178,8 +178,8 @@ export default {
       info.appendChild(top)
       // 定义中部内容
       var middle = document.createElement('div')
-      middle.style.cssText = 'background-color: #07CBFC; padding:20px 10px;  border-radius: 3px; color: #fff;max-width: 300px;word-break: break-word;line-height: 24px;font-size: 12px;'
-      middle.innerHTML = content
+      middle.style.cssText = 'background-color: #07CBFC; padding:20px 10px;  border-radius: 3px; color: #fff;width: 300px;word-break: break-word;line-height: 24px;font-size: 12px;'
+      middle.innerHTML = item.content
       info.appendChild(middle)
       // 定义底部内容
       var bottom = document.createElement('div')
