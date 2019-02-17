@@ -1,9 +1,9 @@
 const mysql = require('mysql')
 let connection = mysql.createConnection({
-  host: '112.74.39.234',
+  host: '127.0.0.1',
   user: 'root',
-  database: 'town',
-  password: 'Hd123456'
+  database: 'dbname',
+  password: 'pwd'
 })
 
 connection.connect((err) => {
