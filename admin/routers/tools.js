@@ -26,12 +26,23 @@ router.use((req, res, next) => {
 
 router.post('/fileUpload', uploads.single('avatar'),(req, res, next) => {
   fs.rename(req.file.path, './static/' + req.file.originalname, function(err) {
-    if (err) throw err
+    if (err) {
+      console.log(err)
+      response.code = 500
+      response.message = '图片上传失败'
+      res.json(response)
+      return
+    }
     // 删除临时文件夹文件, 
     fs.unlink(req.file.path, function() {
-       if (err) throw err;
-       response.data = '/static/' + req.file.originalname
-       res.json(response)
+       if (err) {
+         console.log(err)
+         response.code = 500
+         response.message = '图片上传失败'
+       } else {
+          response.data = '/static/' + req.file.originalname
+          res.json(response)
+       }
     })
   })
 })

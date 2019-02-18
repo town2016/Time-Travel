@@ -12,7 +12,7 @@
         <label>头像</label>
         <div class="right">
           <form id="fileUpload">
-            <input type="file" accept="image/*" @change='_updateAvatar' name="avatar"/>
+            <input type="file" accept="image/*" @change='_updateAvatar' name="avatar" id="avatar"/>
           </form>
           <img :src="!userInfo.avatar ? avatarDefault : userInfo.avatar" width="20" height="20"/>
           <i class="cubeic-arrow"></i>
@@ -109,8 +109,24 @@ export default {
       }).show()
       var fm = new FormData(document.getElementById('fileUpload'))
       fileUpload(fm).then(res => {
+        if (res.code !== 200) {
+          this.$createToast({
+            txt: res.message,
+            time: 2000,
+            type: 'error'
+          }).show()
+          return
+        }
         this.userInfo.avatar = window.location.origin + '/apis' + res.data
         this.loading.hide()
+        document.querySelector('#avatar').value = ''
+      }).catch(e => {
+        this.$createToast({
+          txt: e.message,
+          time: 2000,
+          type: 'error'
+        }).show()
+        document.querySelector('#avatar').value = ''
       })
     }
   }

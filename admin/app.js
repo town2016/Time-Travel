@@ -50,7 +50,7 @@ app.use(
     saveUninitialized: true
   })
 )
-
+ 
 // 检测是否登录
 app.use((req, res, next) => {
   req.cookies = new Cookies(req, res)
@@ -58,9 +58,16 @@ app.use((req, res, next) => {
   if (noAuth.indexOf(req._parsedUrl.pathname) < 0) {
     if (!req.session.user) {
       res.status = 401
+      res.json({
+        code: 401,
+        message: '用户未登录！！！！'
+      })
+    } else {
+      next()
     }
+  } else {
+    next()
   }
-  next()
 })
 
 // 捕获异常信息

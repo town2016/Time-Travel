@@ -26,10 +26,6 @@ router.get('/getMemoryList', (req, res, next) => {
 })
 // 添加动态
 router.post('/addMemory', (req, res, next) => {
-  if (res.status === 401) {
-    res.json({code: 401, message: '用户未登录'})
-    return
-  }
   var params = req.body
   params.userId = req.session.user.userId
   params = tools.makeInserts(params)
@@ -41,10 +37,6 @@ router.post('/addMemory', (req, res, next) => {
 })
 // 拉取复合条件的数据
 router.get('/getMemoeyWithTerm', (req, res, next) => {
-  if (res.status === 401) {
-    res.json({code: 401, message: '用户未登录'})
-    return
-  }
   var query = req.query
   query.pageNo = query.pageNo || 1
   query.pageSize = query.pageSize || 10
@@ -57,10 +49,6 @@ router.get('/getMemoeyWithTerm', (req, res, next) => {
 })
 
 router.get('/getUserMemorys', (req, res, next) => {
-  if (res.status === 401) {
-    res.json({code: 401, message: '用户未登录'})
-    return
-  }
   var query = req.query
   query.pageNo = query.pageNo || 1
   query.pageSize = query.pageSize || 10
@@ -71,10 +59,6 @@ router.get('/getUserMemorys', (req, res, next) => {
 })
 
 router.get('/deleteUserMemory', (req, res, next) => {
-  if (res.status === 401) {
-    res.json({code: 401, message: '用户未登录'})
-    return
-  }
   var params = req.query
   var sql = `${SQL.delete}id in (${params.ids})`
   connection.query(sql, (err, rows) => {

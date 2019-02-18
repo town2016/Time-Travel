@@ -17,13 +17,9 @@ const SQL = {
   add: 'insert into user ',
   update: 'update user set '
 }
-
+ 
 // 拉取所有用户
 router.get('/getUserList', (req, res, next) => {
-  if (res.status === 401) {
-    res.json({code: 401, message: '用户未登录'})
-    return
-  }
   connection.query(SQL.queryAll, (err, rows) => {
     tools.makeResponse(req, res, err, rows)
   })
@@ -134,10 +130,6 @@ router.get('/signout', (req, res, next) => {
 
 // 修改用户信息
 router.post('/updateUser', (req, res, next) => {
-  if (res.status === 401) {
-    res.json({code: 401, message: '用户未登录'})
-    return
-  }
   var params = req.body
   var where = `userId = ${params.userId}`
   params = tools.makeUpdates(params)

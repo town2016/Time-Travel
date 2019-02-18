@@ -53,8 +53,10 @@ export default {
     this.avatar = this.userInfo.avatar ? this.userInfo.avatar : avatarDefault
   },
   created () {
+    
     this.userInfo = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : {}
     this.avatar = this.userInfo.avatar ? this.userInfo.avatar : avatarDefault
+    console.log(this.userInfo)
   },
   methods: {
     goback () {
