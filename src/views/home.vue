@@ -2,7 +2,7 @@
 <div class="Home">
   <div class="topNav flex">
     <div ref="scroll" style="width: 100%;">
-      <span>memory capsule</span>
+      <span>Time Travel</span>
       <span style="float: right; padding-right: 10px;"><i class='cubeic-person'></i>&nbsp;town</span>
     </div>
   </div>
