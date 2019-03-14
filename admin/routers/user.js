@@ -75,7 +75,8 @@ router.post('/signup', (req, res, next) => {
   }
   
   var params = req.body
-  let querys = tools.makeQueryTerms(params)
+  let querys = tools.makeQueryTerms({phone: params.phone})
+  console.log(querys)
   connection.query(`${SQL.queryOne}${querys}`, (err, rows) => {
     if (err) {
       tools.makeResponse(req, res, err, rows)

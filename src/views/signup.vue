@@ -17,6 +17,7 @@
       </div>
     </div>
     <div class="signup-btn" @click='_validate'>注册</div>
+    <p class="link">已注册，<router-link to='/login'>去登陆</router-link></p>
   </div>
 </div>
 </template>

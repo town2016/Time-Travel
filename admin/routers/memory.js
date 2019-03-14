@@ -52,6 +52,7 @@ router.get('/getUserMemorys', (req, res, next) => {
   var query = req.query
   query.pageNo = query.pageNo || 1
   query.pageSize = query.pageSize || 10
+  console.log(req.session)
   const sql = `${SQL.queryTerm}u.userId=${req.session.user.userId} LIMIT ${(query.pageNo - 1)*query.pageSize},${query.pageSize}`
   connection.query(sql, (err, rows) => {
     tools.makeResponse(req, res, err, rows)

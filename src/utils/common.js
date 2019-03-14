@@ -174,6 +174,7 @@ export function stringToNumber (list, data) {
 }
 // 清除cookie
 export function clearCookie () {
+  /* eslint-disable */
   var keys = document.cookie.match(/[^ =;]+(?=\=)/g)
   if (keys) {
     for (var i = keys.length; i--;) {

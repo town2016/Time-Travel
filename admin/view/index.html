@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset=utf-8>
+    <meta name=viewport content="width=device-width,initial-scale=1,user-scalable=no">
+    <link rel=stylesheet href=https://unpkg.com/cube-ui/lib/cube.min.css>
+    <link rel="shortcut icon" href=./favicon.ico>
+    <title>Time Travel</title>
+    <script type=text/javascript src="https://webapi.amap.com/maps?v=1.4.12&key=7c7342705574ca93a6418283b8ce53c4"></script>
+    <link href=./assets/css/app.161efd65a87b633f8ef0faa357c9c035.css rel=stylesheet>
+  </head>
+
+  <body>
+    <div id=app></div>
+    <script type=text/javascript src=./assets/js/manifest.9bf31124e72ce7b02c21.js></script>
+    <script type=text/javascript src=./assets/js/vendor.1b48ec082a66ce9ce86b.js></script>
+    <script type=text/javascript src=./assets/js/app.4b12324b395d8d17babb.js></script>
+    <script>
+      /* var appSecret = '0fd3bec107b2ba7e11d5cb5d7d40524c'
+      var signature = ''
+      $.ajax({
+      	type:"get",
+      	url:"/getWxToken",
+      	async:true,
+      	success: function (res) {
+      	  var token = res.data.access_token
+      	  var timestamp = new Date().getTime()
+          var nonceStr = createNonceStr()
+          var src = location.href.split('#')[0]
+      	  $.ajax({
+      	  	type:"get",
+      	  	url:"/getWxSignature?token=" + token + '&timestamp=' + timestamp + '&src=' + src + '&nonceStr=' + nonceStr,
+      	  	async:true,
+      	  	success: function (rep) {
+      	  	  signature = rep.data
+      	  	  wx.config({
+ 
+                  debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+               
+                  appId: 'wxdb95caaf5fab5d83', // 必填，公众号的唯一标识
+               
+                  timestamp: timestamp, // 必填，生成签名的时间戳
+               
+                  nonceStr: nonceStr, // 必填，生成签名的随机串
+               
+                  signature: signature,// 必填，签名，见附录1
+               
+                  jsApiList: [
+                    'updateTimelineShareData ',
+                    'updateAppMessageShareData',
+                    'translateVoice'
+                  ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+               
+              });
+              
+              wx.ready(function(){
+                  // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
+                  wx.updateAppMessageShareData({
+                      title: '时光旅行', // 分享标题
+                      link: location.href.split('#')[0],
+                      imgUrl: "https://time.szinneractive.cn/static/logo.jpg", // 分享图标
+                      success: function () {
+                        console.log(12312)
+                      }
+                  });
+                 // 获取“分享给朋友”按钮点击状态及自定义分享内容接口
+                  wx.updateTimelineShareData({
+                      title: '时光旅行', // 分享标题
+                      desc: "Time-travel 带你一起回到过去", // 分享描述
+                      link:location.href.split('#')[0],
+                      imgUrl: "https://time.szinneractive.cn/static/logo.jpg", // 分享图标
+                      type: '' // 分享类型,music、video或link，不填默认为link
+                  });
+              });
+      	  	}
+      	  });
+      	}
+      });
+      
+      // 生存随机串
+      function createNonceStr () {
+        var list = 'abcdefghijklmnopqrstuvwxyzABCDQWE1R3M5SDDKLSvasdDVGHRTqwerYERTXVB'
+        var len = list.length
+        var str = ''
+        var i = 16
+        while(i){
+          var r = Math.floor(Math.random() * len)
+          str += list[r]
+          i--
+        }
+        return str
+      } */
+    </script>
+  </body>
+
+</html>
