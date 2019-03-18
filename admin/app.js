@@ -63,7 +63,7 @@ app.use(
 // 检测是否登录
 app.use((req, res, next) => {
   req.cookies = new Cookies(req, res)
-  var noAuth = ['/user/signin', '/user/signup', '/', '/MP_verify_UpZ3j1inwr26spWo.txt', '/getWxSignature', '/getWxToken']
+  var noAuth = ['/user/signin', '/user/signup', '/']
   if (noAuth.indexOf(req._parsedUrl.pathname) < 0) {
     var reg = new RegExp(/\/assets\//)
     var reg2 = new RegExp(/\/static\//)
@@ -131,7 +131,7 @@ app.use('/tools', require('./routers/tools'))
 
 // 拉取微信toke
 
-app.get('/getWxToken', function (req, res, next) {
+/* app.get('/getWxToken', function (req, res, next) {
   axios.get('https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxdb95caaf5fab5d83&secret=0fd3bec107b2ba7e11d5cb5d7d40524c').then(doc => {
     response.data = doc.data
     res.json(response)
@@ -141,10 +141,10 @@ app.get('/getWxToken', function (req, res, next) {
     res.json(response)
     console.log(e)
   })
-})
+}) */
 
 // 拉取微信签名 https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token="+token+"&type=jsapi
-app.get('/getWxSignature', function (req, res, next) {
+/* app.get('/getWxSignature', function (req, res, next) {
   var query = req.query
   axios.get(`https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=${query.token}&type=jsapi`).then(doc => {
     var ticket = doc.data.ticket
@@ -157,14 +157,14 @@ app.get('/getWxSignature', function (req, res, next) {
     res.json(response)
     console.log(e)
   })
-})
+}) */
 
 
 app.get('/', function (req, res, next) {
   res.render('index')
 })
 
-app.use('/', express.static(__dirname + '/'))
+// app.use('/', express.static(__dirname + '/'))
 
 /*app.get('*', function(req, res){
   res.write(`
